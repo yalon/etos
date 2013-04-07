@@ -41,6 +41,7 @@ class PipeInput(Greenlet):
                     if e.errno not in (EAGAIN, errno.EINTR, errno.EINVAL):
                         raise
                     if e.errno == errno.EINVAL:
+                        logbook.info("EINVAL error occurred, reopening pipe.")
                         fd = os.open(self.path, os.O_RDONLY | os.O_NONBLOCK)
                     sys.exc_clear()
         except:
