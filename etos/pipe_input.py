@@ -36,7 +36,9 @@ class PipeInput(Greenlet):
                     if len(buf) > 0:
                         self._split_and_output(buf)
                 except OSError, e:
-                    if e.errno not in (EAGAIN, errno.EINTR):
+                    # Added errno.EINVAL because it happens in a production Ubuntu 12.10 32bit server, but not on my
+                    # Ubuntu 12.10 64bit laptop.
+                    if e.errno not in (EAGAIN, errno.EINTR, errno.EINVAL):
                         raise
                     sys.exc_clear()
         except:
