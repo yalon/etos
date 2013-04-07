@@ -2,6 +2,7 @@ import os
 import stat
 import errno
 import sys
+import logbook
 from gevent import Greenlet
 from gevent.hub import get_hub
 from gevent.socket import EAGAIN
@@ -38,6 +39,9 @@ class PipeInput(Greenlet):
                     if e.errno not in (EAGAIN, errno.EINTR):
                         raise
                     sys.exc_clear()
+        except:
+            logbook.exception("error occurred for pipe {0}".format(self.path))
+            raise
         finally:
             os.close(fd)
             os.unlink(self.path)

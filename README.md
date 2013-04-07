@@ -9,3 +9,4 @@ Depends on:
 - setproctitle
 - lockfile
 - docopt
+- logbook

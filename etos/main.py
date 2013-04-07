@@ -23,6 +23,7 @@ from docopt import docopt
 import errno
 import syslog
 import gevent
+import logbook
 from lockfile.pidlockfile import PIDLockFile
 from setproctitle import setproctitle
 from contextlib import contextmanager
@@ -100,8 +101,15 @@ if __name__ == "__main__":
         greenlets.append(PipeInput(arg[1], parser))
 
     with context:
-        if arguments["--daemonize"]:
-            setproctitle("[etos]")
-        for g in greenlets:
-            g.start()
-        gevent.joinall(greenlets)
+        format_string = "[{record.process}] <{record.level_name}> {record.message}"
+        logbook.SyslogHandler(application_name="etos", format_string=format_string).push_application()
+        logbook.info("etos started.")
+
+        try:
+            if arguments["--daemonize"]:
+                setproctitle("[etos]")
+            for g in greenlets:
+                g.start()
+            gevent.joinall(greenlets)
+        finally:
+            logbook.info("etos stopped.")
