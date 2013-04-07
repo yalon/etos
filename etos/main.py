@@ -16,7 +16,7 @@ import os
 import sys
 
 if __name__ == "__main__":
-    module_path = os.path.realpath(os.path.join(os.path.dirname(__file__), ".."))
+    module_path = os.path.realpath(os.path.join(os.path.dirname(os.path.realpath(__file__)), ".."))
     sys.path.insert(0, module_path)
 
 from docopt import docopt
