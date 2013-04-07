@@ -21,13 +21,13 @@ if __name__ == "__main__":
 
 from docopt import docopt
 import errno
-import daemon
 import syslog
 import gevent
 from lockfile.pidlockfile import PIDLockFile
 from setproctitle import setproctitle
 from contextlib import contextmanager
 
+from etos.geventdaemon import GeventDaemonContext
 from etos.nginx_parser import NginxParser
 from etos.pipe_input import PipeInput
 
@@ -83,7 +83,7 @@ if __name__ == "__main__":
         pid_file = create_pid_file(arguments['--pid'])
 
     if arguments['--daemonize']:
-        context = daemon.DaemonContext(pidfile=pid_file)
+        context = GeventDaemonContext(pidfile=pid_file)
     elif pid_file:
         context = pid_file
     else:
