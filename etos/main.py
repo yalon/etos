@@ -108,8 +108,6 @@ if __name__ == "__main__":
         try:
             if arguments["--daemonize"]:
                 setproctitle("[etos]")
-            for g in greenlets:
-                g.start()
-            gevent.joinall(greenlets)
+            gevent.joinall([gevent.spawn(g.run) for g in greenlets])
         finally:
             logbook.info("etos stopped.")

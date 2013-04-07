@@ -3,14 +3,13 @@ import stat
 import errno
 import sys
 import logbook
-from gevent import Greenlet
 from gevent.hub import get_hub
 from gevent.socket import EAGAIN
 
 READ_SIZE = 4096
 
 
-class PipeInput(Greenlet):
+class PipeInput(object):
     def __init__(self, path, output, read_size=READ_SIZE):
         super(PipeInput, self).__init__()
         self.path = path
@@ -18,7 +17,7 @@ class PipeInput(Greenlet):
         self.read_size = read_size
         self.buffer = []
 
-    def _run(self):
+    def run(self):
         try:
             os.mkfifo(self.path)
         except OSError, e:
