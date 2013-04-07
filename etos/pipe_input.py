@@ -40,6 +40,8 @@ class PipeInput(Greenlet):
                     # Ubuntu 12.10 64bit laptop.
                     if e.errno not in (EAGAIN, errno.EINTR, errno.EINVAL):
                         raise
+                    if e.errno == errno.EINVAL:
+                        fd = os.open(self.path, os.O_RDONLY | os.O_NONBLOCK)
                     sys.exc_clear()
         except:
             logbook.exception("error occurred for pipe {0}".format(self.path))
