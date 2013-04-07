@@ -51,8 +51,7 @@ etos_start() {
 
 etos_stop() {
     log_daemon_msg "Stopping" "$NAME"
-    start-stop-daemon --stop --oknodo --quiet --name "$NAME" --retry 3 \
-                      --pidfile "$PIDFILE"
+    start-stop-daemon --stop --retry TERM/10/KILL/5 --pidfile "$PIDFILE"
     RET="$?"
     log_end_msg $RET
     rm -f "$PIDFILE"
