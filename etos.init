@@ -14,7 +14,7 @@ set -e
 ETOS_OPTS=""
 
 # we source /etc/default/etos if exists
-[ -r /etc/default/etos ] && . /etc/default/syslog-ng
+[ -r /etc/default/etos ] && . /etc/default/etos
 
 # stop etos before changing its PID file!
 PIDFILE="/var/run/etos.pid"
@@ -49,7 +49,7 @@ etos_start() {
     return $RET
 }
 
-syslogng_stop() {
+etos_stop() {
     log_daemon_msg "Stopping" "$NAME"
     start-stop-daemon --stop --oknodo --quiet --name "$NAME" --retry 3 \
                       --pidfile "$PIDFILE"
@@ -65,10 +65,10 @@ case "$1" in
     etos_start || exit 1
     ;;
   stop)
-    syslogng_stop || exit 1
+    etos_stop || exit 1
     ;;
   restart)
-    syslogng_stop
+    etos_stop
     etos_start || exit 1
     ;;
   status)
