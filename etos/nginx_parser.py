@@ -23,7 +23,7 @@ class NginxParser(object):
             priority = NGINX_PRIORITY_TO_SYSLOG[priority]
         else:
             syslog.syslog(self.facility | syslog.LOG_WARNING,
-                          "etos: could not match nginx priority {0} to syslog, so using INFO. Full line: {1}", priority,
-                          line)
+                          ("etos: could not match nginx priority {0} to syslog, so using INFO. " +
+                           "Full line: {1}").format(priority, line))
             priority = syslog.LOG_INFO
         syslog.syslog(self.facility | priority, line)
